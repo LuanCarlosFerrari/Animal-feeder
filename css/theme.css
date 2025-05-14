@@ -1,0 +1,21 @@
+/* Cores, fontes e variáveis customizadas */
+:root {
+    --color-bg-main: #202020;
+    --color-bg-sec: #232323;
+    --color-btn-main: #2D2D2D;
+    --color-btn-action: #FF8866;
+    --color-input-bg: #373737;
+    --color-white: #FFFFFF;
+    --color-text-gray: #E0E0E0;
+    --color-cursor-green: #32CD32;
+    --color-btn-voltar: #4A4A88;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-bg-main);
+    color: var(--color-white);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

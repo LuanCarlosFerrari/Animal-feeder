@@ -1,0 +1,73 @@
+/* Componentes: botões, inputs, cards, modais, mensagens */
+.nav-button, .nav-button-back, .nav-button-inline {
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+input, select, textarea {
+    background: var(--color-input-bg);
+    color: var(--color-white);
+    border-radius: 0.375rem;
+    border: 1px solid #444;
+    padding: 0.75rem;
+    outline: none;
+    caret-color: var(--color-cursor-green);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--color-btn-action);
+    box-shadow: 0 0 0 2px var(--color-btn-action);
+}
+
+#modalDieta {
+    z-index: 50;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-red-400 {
+    color: #f87171;
+}
+
+.text-text-gray {
+    color: var(--color-text-gray);
+}
+
+/* Scrollbar customizado */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-btn-main);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-btn-voltar);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #5a5a9a;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-btn-voltar) var(--color-btn-main);
+}
+
+::placeholder {
+  color: #888888;
+  opacity: 1;
+}
+:-ms-input-placeholder {
+  color: #888888;
+}
+::-ms-input-placeholder {
+  color: #888888;
+}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimalFeeder Web</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app-container"
+        class="bg-bg-main text-white p-4 md:p-6 rounded-lg shadow-xl max-w-lg mx-auto my-4 font-inter w-full min-h-screen flex flex-col justify-center items-center">
+
+        <section id="telaInicial" class="screen active-screen p-4 rounded-md bg-bg-sec w-full max-w-md mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-8">AnimalFeeder</h1>
+            <img id="logo" src="Assets/logo.png" alt="Logo AnimalFeeder" class="mx-auto mb-6 h-20 object-contain">
+            <div class="grid grid-cols-1 gap-4">
+                <button data-target="telaDietas"
+                    class="nav-button bg-btn-main hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-lg text-lg transition-colors">Gerenciar
+                    Dietas</button>
+                <button data-target="telaLotes"
+                    class="nav-button bg-btn-main hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-lg text-lg transition-colors">Gerenciar
+                    Lotes</button>
+                <button data-target="telaCalcular"
+                    class="nav-button bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition-colors">Calcular
+                    Ração</button>
+                <button data-target="telaResultados"
+                    class="nav-button bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 px-4 rounded-lg text-lg transition-colors">Ver
+                    Resultados</button>
+            </div>
+        </section>
+
+        <section id="telaDietas" class="screen hidden p-4 rounded-md bg-bg-sec w-full max-w-md mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Gerenciamento de Dietas</h2>
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3 text-center">Dietas Disponíveis</h3>
+                <div id="dietasContainer" class="space-y-3 max-h-60 overflow-y-auto p-3 bg-input-bg rounded-md">
+                </div>
+                <p id="noDietasMessage" class="text-center text-text-gray mt-4 hidden">Nenhuma dieta cadastrada.</p>
+            </div>
+            <button id="btnNovaDieta"
+                class="w-full bg-btn-main hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-lg mb-3 transition-colors">+
+                Nova Dieta</button>
+            <div class="flex space-x-2">
+                <button id="btnImportDietas"
+                    class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Importar
+                    Dietas (JSON)</button>
+                <input type="file" id="importDietasFile" accept=".json" class="hidden">
+                <button id="btnExportDietas"
+                    class="flex-1 bg-green-600 hover:bg-green-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Exportar
+                    Dietas (JSON)</button>
+            </div>
+            <p id="lblMensagemDietas" class="text-center mt-4 text-sm"></p>
+            <button data-target="telaInicial"
+                class="nav-button-back w-full mt-6 bg-btn-voltar hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Voltar</button>
+        </section>
+
+        <section id="telaLotes" class="screen hidden p-4 rounded-md bg-bg-sec w-full max-w-md mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Gerenciamento de Lotes</h2>
+            <div class="mb-4">
+                <label for="inputNovoLote" class="block text-sm font-medium text-text-gray mb-1">Nº de Cabeças do Novo
+                    Lote:</label>
+                <div class="flex items-center space-x-2">
+                    <input type="number" id="inputNovoLote" placeholder="Ex: 250"
+                        class="flex-grow p-2.5 rounded-md bg-input-bg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none caret-cursor-green">
+                    <button id="btnAdicionarLote"
+                        class="bg-btn-main hover:bg-opacity-80 text-white font-semibold py-2.5 px-5 rounded-md transition-colors">+</button>
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold mb-2 text-center">Lotes Cadastrados</h3>
+            <p class="text-xs text-text-gray text-center mb-3">Quantidade = Número de cabeças por lote</p>
+            <div id="lotesContainer" class="space-y-2 max-h-60 overflow-y-auto p-3 bg-input-bg rounded-md">
+            </div>
+            <p id="noLotesMessage" class="text-center text-text-gray mt-4 hidden">Nenhum lote cadastrado.</p>
+            <p id="lblStatusLotes" class="text-center mt-4 text-sm"></p>
+            <div class="flex space-x-2 mt-4">
+                <button id="btnImportLotes"
+                    class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Importar
+                    Lotes (JSON)</button>
+                <input type="file" id="importLotesFile" accept=".json" class="hidden">
+                <button id="btnExportLotes"
+                    class="flex-1 bg-green-600 hover:bg-green-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Exportar
+                    Lotes (JSON)</button>
+            </div>
+            <button data-target="telaInicial"
+                class="nav-button-back w-full mt-6 bg-btn-voltar hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Voltar</button>
+        </section>
+
+        <section id="telaCalcular" class="screen hidden p-4 rounded-md bg-bg-sec w-full max-w-md mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Calculadora de Ração</h2>
+            <div class="space-y-5">
+                <div>
+                    <label for="spinnerDietas" class="block text-sm font-semibold text-text-gray mb-1">Selecione a
+                        Dieta:</label>
+                    <select id="spinnerDietas"
+                        class="w-full p-3 rounded-md bg-input-bg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </select>
+                </div>
+                <div class="bg-gray-700 p-3 rounded-md">
+                    <h4 class="text-md font-semibold mb-2 text-center">Resumo dos Lotes</h4>
+                    <p id="lblQtdLotes" class="text-sm text-text-gray">Nenhum lote encontrado</p>
+                    <p id="lblTotalCabecas" class="text-sm text-text-gray">Total: 0 cabeças</p>
+                    <button data-target="telaLotes"
+                        class="nav-button-inline w-full mt-2 bg-btn-main hover:bg-opacity-80 text-white text-sm py-2 px-3 rounded-md transition-colors">Gerenciar
+                        Lotes</button>
+                </div>
+                <div>
+                    <label for="inputPvMedio" class="block text-sm font-semibold text-text-gray mb-1">PV Médio
+                        (kg):</label>
+                    <input type="number" id="inputPvMedio" placeholder="Ex: 400"
+                        class="w-full p-3 rounded-md bg-input-bg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none caret-cursor-green">
+                </div>
+                <div>
+                    <label for="inputPercConsumo" class="block text-sm font-semibold text-text-gray mb-1">% Consumo
+                        Matéria Seca (Ex: 2.5 para 2,5%):</label>
+                    <input type="number" id="inputPercConsumo" placeholder="Ex: 2.5" step="0.1"
+                        class="w-full p-3 rounded-md bg-input-bg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none caret-cursor-green">
+                </div>
+            </div>
+            <p id="lblErroCalculo" class="text-red-400 text-center mt-4 text-sm"></p>
+            <button id="btnCalcularRacao"
+                class="w-full mt-6 bg-btn-action hover:bg-opacity-80 text-white font-bold py-3.5 px-4 rounded-lg text-lg transition-colors">Calcular
+                Ração</button>
+            <button data-target="telaInicial"
+                class="nav-button-back w-full mt-3 bg-btn-voltar hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Voltar</button>
+        </section>
+
+        <section id="telaResultados"
+            class="screen hidden p-4 rounded-md bg-bg-sec w-full max-w-md mx-auto flex flex-col h-full">
+            <h2 class="text-2xl font-bold mb-6 text-center">Resultados do Cálculo</h2>
+            <div class="flex-grow flex flex-col min-h-0">
+                <div id="resultadosContainer" class="bg-input-bg p-4 rounded-md flex-grow overflow-y-auto">
+                    <p id="noResultsMessage" class="text-center text-text-gray">Nenhum cálculo realizado ainda.</p>
+                </div>
+                <p id="lblExportStatus" class="text-center mt-4 text-sm"></p>
+                <div class="mt-4 space-y-3">
+                    <button id="btnExportarExcel"
+                        class="w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Exportar
+                        para Excel (.xlsx)</button>
+                    <button data-target="telaInicial"
+                        class="nav-button-back w-full bg-btn-voltar hover:bg-opacity-80 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Voltar</button>
+                </div>
+            </div>
+        </section>
+
+        <div id="modalDieta"
+            class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+            <div class="bg-bg-sec p-6 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+                <h3 id="modalDietaTitle" class="text-xl font-bold mb-6 text-center">Nova Dieta</h3>
+                <input type="hidden" id="modalDietaIndex">
+                <div>
+                    <label for="inputNomeDieta" class="block text-sm font-semibold text-text-gray mb-1">Nome da
+                        Dieta:</label>
+                    <input type="text" id="inputNomeDieta" placeholder="Ex: Engorda Rápida"
+                        class="w-full p-3 rounded-md bg-input-bg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none caret-cursor-green mb-4">
+                </div>
+                <h4 class="text-md font-semibold mb-2">Ingredientes:</h4>
+                <div id="ingredientesFormContainer"
+                    class="space-y-3 mb-4 max-h-60 overflow-y-auto p-2 border border-gray-700 rounded-md">
+                </div>
+                <button id="btnAdicionarIngredienteForm"
+                    class="w-full bg-btn-main hover:bg-opacity-80 text-white font-semibold py-2.5 px-4 rounded-md mb-6 transition-colors">+
+                    Adicionar Ingrediente</button>
+                <div class="flex space-x-3">
+                    <button id="btnSalvarDieta"
+                        class="flex-1 bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Salvar</button>
+                    <button id="btnCancelarDieta"
+                        class="flex-1 bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Cancelar</button>
+                </div>
+                <p id="modalDietaError" class="text-red-400 text-center mt-3 text-sm"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configuração do Tailwind CSS para corresponder às cores Kivy
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-main': '#202020',
+                        'bg-sec': '#232323',
+                        'btn-main': '#2D2D2D',
+                        'btn-action': '#FF8866',
+                        'input-bg': '#373737',
+                        'white': '#FFFFFF',
+                        'text-gray': '#E0E0E0',
+                        'cursor-green': '#32CD32',
+                        'btn-voltar': '#4A4A88',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="js/dietas.js"></script>
+    <script src="js/lotes.js"></script>
+    <script src="js/calculo.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
