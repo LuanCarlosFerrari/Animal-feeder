@@ -5,8 +5,32 @@ function carregarDietasDoLocalStorage() {
     return dietasJSON ? JSON.parse(dietasJSON) : [];
 }
 
-function salvarDietasNoLocalStorage(dietas) {
+async function salvarDietasNoLocalStorage(dietas) {
+    // Salva no localStorage
     localStorage.setItem('animalFeederDietas', JSON.stringify(dietas));
+
+    // Cria um Blob com os dados
+    const dietasJson = JSON.stringify(dietas, null, 2);
+    const blob = new Blob([dietasJson], { type: 'application/json' });
+
+    try {
+        // Tenta salvar o arquivo
+        const handle = await window.showSaveFilePicker({
+            suggestedName: 'Data/animalfeeder_dietas.json',
+            types: [{
+                description: 'Arquivo JSON',
+                accept: { 'application/json': ['.json'] },
+            }],
+        });
+
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+
+        console.log('Dietas salvas com sucesso no arquivo');
+    } catch (error) {
+        console.error('Erro ao salvar arquivo de dietas:', error);
+    }
 }
 
 function exibirDietas(dietas, dietasContainer, noDietasMessage) {

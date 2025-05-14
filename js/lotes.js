@@ -5,8 +5,32 @@ function carregarLotesDoLocalStorage() {
     return lotesJSON ? JSON.parse(lotesJSON) : [];
 }
 
-function salvarLotesNoLocalStorage(lotes) {
+async function salvarLotesNoLocalStorage(lotes) {
+    // Salva no localStorage
     localStorage.setItem('animalFeederLotes', JSON.stringify(lotes));
+
+    // Cria um Blob com os dados
+    const lotesJson = JSON.stringify(lotes, null, 2);
+    const blob = new Blob([lotesJson], { type: 'application/json' });
+
+    try {
+        // Tenta salvar o arquivo
+        const handle = await window.showSaveFilePicker({
+            suggestedName: 'Data/animalfeeder_lotes.json',
+            types: [{
+                description: 'Arquivo JSON',
+                accept: { 'application/json': ['.json'] },
+            }],
+        });
+
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+
+        console.log('Lotes salvos com sucesso no arquivo');
+    } catch (error) {
+        console.error('Erro ao salvar arquivo de lotes:', error);
+    }
 }
 
 function exibirLotes(lotes, lotesContainer, noLotesMessage) {

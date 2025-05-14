@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNovaDieta.addEventListener('click', abrirModalNovaDieta);
     btnCancelarDieta.addEventListener('click', () => modalDieta.classList.add('hidden'));
 
-    btnSalvarDieta.addEventListener('click', () => {
+    btnSalvarDieta.addEventListener('click', async () => {
         const nomeDieta = inputNomeDieta.value.trim();
         if (!nomeDieta) {
             modalDietaError.textContent = 'O nome da dieta é obrigatório.';
@@ -188,10 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dietas.push(novaDieta);
             lblMensagemDietas.textContent = `Dieta "${nomeDieta}" salva com sucesso!`;
         }
-        lblMensagemDietas.className = 'text-green-400 text-center mt-4 text-sm';
-
-
-        salvarDietasNoLocalStorage();
+        lblMensagemDietas.className = 'text-green-400 text-center mt-4 text-sm'; await salvarDietasNoLocalStorage();
         exibirDietas(); // Reexibe a lista
         modalDieta.classList.add('hidden');
         setTimeout(() => lblMensagemDietas.textContent = '', 3000);
@@ -311,11 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
         exibirLotes();
     }
 
-    btnAdicionarLote.addEventListener('click', () => {
-        const numCabecas = parseInt(inputNovoLote.value);
-        if (!isNaN(numCabecas) && numCabecas > 0) {
+    btnAdicionarLote.addEventListener('click', async () => {
+        const numCabecas = parseInt(inputNovoLote.value); if (!isNaN(numCabecas) && numCabecas > 0) {
             lotes.push(numCabecas);
-            salvarLotesNoLocalStorage();
+            await salvarLotesNoLocalStorage();
             exibirLotes();
             inputNovoLote.value = '';
             lblStatusLotes.textContent = 'Lote adicionado!';
